@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Facturas - Tu Tienda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/historycompras.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="cliente.html">
+                <i class="bi bi-arrow-left-circle me-2"></i>Volver a la Tienda
+            </a>              
+            <div class="d-flex align-items-center">
+                <span id="user-name" class="text-white me-3 fw-medium"></span>
+                <div id="user-buttons"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card mb-4">
+                    <div class="card-header text-white">
+                        <i class="fas fa-user-circle me-2"></i>Mi Cuenta
+                    </div>
+                    <div class="list-group list-group-flush rounded-bottom">
+                        <a href="perfil.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user me-2"></i>Datos Personales
+                        </a>
+                        <a href="historial-compras.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-bag me-2"></i>Mis Compras
+                        </a>
+                        <a href="facturasuser.html" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-file-invoice me-2"></i>Mis Facturas
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Contenido de facturas -->
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-file-invoice-dollar me-2"></i>Historial de Facturas</h5>
+                        <span id="total-facturas" class="badge bg-light text-primary"></span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="facturas-container" class="accordion accordion-flush">
+                            <!-- Las facturas se cargarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/facturasUsers.js" type="module"></script>
+</body>
+</html>

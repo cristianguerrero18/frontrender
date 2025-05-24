@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Moviles CF</title>
+  <link rel="icon" type="images/png" href="/images/Fondo-claro-logo.webp" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/inventario.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --primary-blue: #2563eb;
+      --dark-blue: #1e40af;
+      --light-blue: #3b82f6;
+      --primary-green: #10b981;
+      --dark-green: #091a14;
+      --light-green: #34d399;
+      --gradient-blue: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      --gradient-green: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      --dark-gray: #1e293b;
+      --medium-gray: #64748b;
+      --light-gray: #f1f5f9;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #13547a 0%, #80d0c7 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .login-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      transition: var(--transition);
+    }
+    
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--gradient-blue);
+      z-index: 2;
+    }
+    
+    .login-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .login-content {
+      padding: 40px;
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .login-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      background-color: var(--light-gray);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      border: 8px solid var(--white);
+      overflow: hidden;
+    }
+    
+    .login-logo img {
+      max-width: 70%;
+      max-height: 70%;
+    }
+    
+    .login-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--dark-gray);
+      margin-bottom: 10px;
+    }
+    
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--medium-gray);
+      margin-bottom: 0;
+    }
+    
+    /* Role selection cards */
+    .role-selection {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .role-card {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .role-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .role-card.active {
+      border: 2px solid var(--primary-blue);
+    }
+    
+    .role-card.admin.active {
+      border-color: var(--primary-blue);
+    }
+    
+    .role-card.client.active {
+      border-color: var(--primary-green);
+    }
+    
+    .role-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--white);
+    }
+    
+    .role-card.admin .role-icon {
+      background: var(--gradient-blue);
+    }
+    
+    .role-card.client .role-icon {
+      background: var(--gradient-green);
+    }
+    
+    .role-name {
+      font-weight: 600;
+      color: var(--dark-gray);
+      margin-bottom: 5px;
+    }
+    
+    .role-desc {
+      font-size: 12px;
+      color: var(--medium-gray);
+      margin-bottom: 0;
+    }
+    
+    /* Forms */
+    .form-container {
+      display: none;
+      animation: fadeIn 0.4s ease-out;
+    }
+    
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .form-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: var(--white);
+    }
+    
+    #admin-form .form-icon {
+      background: var(--gradient-blue);
+    }
+    
+    #client-form .form-icon,
+    #register-form .form-icon {
+      background: var(--gradient-green);
+    }
+    
+    .form-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark-gray);
+      margin-bottom: 5px;
+    }
+    
+    .form-subtitle {
+      font-size: 14px;
+      color: var(--medium-gray);
+      margin-bottom: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark-gray);
+      margin-bottom: 8px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: var(--transition);
+      background-color: var(--white);
+      color: var(--dark-gray);
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+    
+    .form-control::placeholder {
+      color: #94a3b8;
+      opacity: 1;
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: 12px 20px;
+      font-size: 14px;
+      line-height: 1.5;
+      border-radius: 8px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: var(--gradient-blue);
+      color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-primary:hover {
+      background: var(--dark-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-success {
+      background: var(--gradient-green);
+      color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-success:hover {
+      background: var(--dark-green);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-light {
+      background-color: var(--white);
+      border-color: #e2e8f0;
+      color: var(--medium-gray);
+    }
+    
+    .btn-light:hover {
+      background-color: var(--light-gray);
+      border-color: #cbd5e1;
+    }
+    
+    /* Links */
+    .text-link {
+      display: inline-block;
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    
+    .text-link:hover {
+      color: var(--dark-blue);
+      text-decoration: underline;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-3 {
+      margin-top: 15px;
+    }
+    
+    .mt-4 {
+      margin-top: 20px;
+    }
+    
+    .mb-4 {
+      margin-bottom: 20px;
+    }
+    
+    /* Footer */
+    .login-footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    
+    .footer-text {
+      font-size: 12px;
+      color: var(--medium-gray);
+      margin-bottom: 0;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+      .login-content {
+        padding: 30px 20px;
+      }
+      
+      .role-selection {
+        grid-template-columns: 1fr;
+      }
+      
+      .login-logo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+      #client-form {
+        color: black;
+      }
+
+    
+      #client-form input {
+        color: black !important;          /* Texto escrito */
+        background-color: white !important; /* Fondo del input */
+        border: 1px solid #ccc;
+      }
+      #admin-form input {
+        color: black !important;          /* Texto escrito */
+        background-color: white !important; /* Fondo del input */
+        border: 1px solid #ccc;
+      }
+
+      #register-form input {
+        color: black !important;          /* Texto escrito */
+        background-color: white !important; /* Fondo del input */
+        border: 1px solid #ccc;
+      }
+    
+      #client-form input::placeholder {
+        color: black;
+        opacity: 0.6;
+      }
+    
+      .form-label {
+        color: black;
+      }
+    
+      #client-form .register-link,
+      #client-form .btn-back {
+        color: black;
+      }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-content">
+      <!-- Role selection screen -->
+      <div id="role-selection">
+        <div class="login-header">
+          <div class="login-logo">
+            <img src="img/remove.png" alt="Logo Móviles CF" style="height: 100px;">
+          </div>
+          <h1 class="login-title">Bienvenido a Móviles CF</h1>
+          <p class="login-subtitle">Selecciona tu tipo de acceso</p>
+        </div>        
+        
+        <div class="role-selection">
+          <div class="role-card admin" id="admin-option">
+            <div class="role-icon">
+              <i class="bi bi-shield-lock"></i>
+            </div>
+            <h4 class="role-name">Administrador</h4>
+            <p class="role-desc">Acceso al panel de gestión</p>
+          </div>
+          
+          <div class="role-card client" id="client-option">
+            <div class="role-icon">
+              <i class="bi bi-person"></i>
+            </div>
+            <h4 class="role-name">Cliente</h4>
+            <p class="role-desc">Compra de productos</p>
+          </div>
+          <div class="text-center mt-2">
+            <a href="cliente.html" class="text-link">Entrar como invitado</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Admin login form -->
+      <div class="form-container" id="admin-form">
+        <div class="form-header">
+          <div class="form-icon">
+            <i class="bi bi-shield-lock"></i>
+          </div>
+          <h2 class="form-title">Acceso Administrador</h2>
+          <p class="form-subtitle">Ingresa tus credenciales para continuar</p>
+        </div>
+        
+        <form id="admin-login-form">
+          <div class="form-group">
+            <label for="admin-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="admin-email" required placeholder="admin@movilescf.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="admin-password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="admin-password" required placeholder="••••••••">
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+        </form>
+        
+        <button class="btn btn-light btn-block mt-3" id="back-from-admin">
+          <i class="bi bi-arrow-left"></i> Volver
+        </button>
+      </div>
+      
+      <!-- Client login form -->
+      <div class="form-container" id="client-form">
+        <div class="form-header">
+          <div class="form-icon">
+            <i class="bi bi-person"></i>
+          </div>
+          <h2 class="form-title">Acceso Cliente</h2>
+          <p class="form-subtitle">Ingresa para ver nuestros productos</p>
+        </div>
+        
+        <form id="client-login-form">
+          <div class="form-group">
+            <label for="client-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="client-email" required placeholder="cliente@ejemplo.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="client-password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="client-password" required placeholder="••••••••">
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-block">Iniciar sesión</button>
+        </form>
+        
+        <div class="text-center mt-3">
+          <a href="#" class="text-link" id="register-link">¿No tienes cuenta? Regístrate aquí</a>
+        </div>
+
+       
+        
+        <button class="btn btn-light btn-block mt-3" id="back-from-client">
+          <i class="bi bi-arrow-left"></i> Volver
+        </button>
+      </div>
+      
+      <!-- Client registration form -->
+      <div class="form-container" id="register-form">
+        <div class="form-header">
+          <div class="form-icon">
+            <i class="bi bi-person-plus"></i>
+          </div>
+          <h2 class="form-title">Registro de Cliente</h2>
+          <p class="form-subtitle">Crea tu cuenta para comenzar</p>
+        </div>
+        
+        <form id="client-register-form">
+          <div class="form-group">
+            <label for="register-nombre" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" id="register-nombre" required placeholder="Juan Pérez">
+          </div>
+          
+          <div class="form-group">
+            <label for="register-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="register-email" required placeholder="tu@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="register-password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="register-password" required placeholder="••••••••">
+          </div>
+          
+          <div class="form-group">
+            <label for="register-direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="register-direccion" required placeholder="Calle 123, Ciudad">
+          </div>
+          
+          <div class="form-group">
+            <label for="register-telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="register-telefono" required placeholder="3001234567">
+          </div>
+          
+          <div class="form-group">
+            <label for="register-cedula" class="form-label">Cédula</label>
+            <input type="text" class="form-control" id="register-cedula" required placeholder="1234567890">
+          </div>
+
+          <div class="form-group">
+            <label for="register-confirm-password" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="register-confirm-password" required placeholder="••••••••">
+          </div>
+          
+          <button type="submit" class="btn btn-success btn-block">Registrarse</button>
+        </form>
+        
+        <button class="btn btn-light btn-block mt-3" id="back-from-register">
+          <i class="bi bi-arrow-left"></i> Volver
+        </button>
+      </div>
+      
+      <div class="login-footer">
+        <p class="footer-text">© 2024 Móviles CF. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="js/login.js" type="module"></script>
+</body>
+</html>

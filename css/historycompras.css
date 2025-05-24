@@ -1,0 +1,116 @@
+/* Estilos para el historial de compras */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+}
+
+.accordion-item {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Efecto hover para las filas de productos */
+.table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+:root {
+    --primary-color: #13547a;
+    --secondary-color: #f8f9fc;
+    --accent-color: #80d0c7;
+    --text-color: #5a5c69;
+}
+
+body {
+    background-color: #f8f9fc;
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.navbar-brand:hover {
+    transform: translateX(-3px);
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2);
+}
+
+.card-header {
+    border-bottom: none;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: var(--secondary-color);
+    padding-left: 2rem;
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    color: #fff;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(78, 115, 223, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(78, 115, 223, 0.25);
+}
+
+.badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5em 0.75em;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* Nueva lógica para mantener el color activo */
+.list-group-item.active {
+    background-color: var(--primary-color) !important;
+    color: white;
+    font-weight: bold;
+}
