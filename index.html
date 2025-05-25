@@ -12,10 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
-    <!-- Add these at the bottom of the body or in the head -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root {
       --primary-color: #13547a;
@@ -96,7 +93,7 @@
     
     .sidebar-item a:hover {
       color: black;
-  }
+    }
   
     .sidebar-link i {
       font-size: 1.1rem;
@@ -152,7 +149,6 @@
       color: var(--primary-color);
     }
     
-    /* Table Container Styles */
     .table-container {
       padding: 30px;
       background-color: white;
@@ -213,7 +209,6 @@
       color: #dc3545;
     }
     
-    /* Footer Styles */
     footer {
       padding: 20px;
       text-align: center;
@@ -222,7 +217,6 @@
       margin-top: 30px;
     }
     
-    /* Modal Styles */
     .modal-header {
       border-bottom: none;
       padding-bottom: 0;
@@ -233,7 +227,6 @@
       color: var(--primary-color);
     }
     
-    /* Responsive Styles */
     @media (max-width: 992px) {
       .sidebar {
         width: 80px;
@@ -250,7 +243,6 @@
       
       .sidebar-link {
         justify-content: center;
-        
       }
       
       .main-content {
@@ -280,13 +272,10 @@
         margin: 10px;
       }
     }
-    
-    
   </style>
 </head>
 
 <body>
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-header">
       <img src="img/administrador.png" alt="Moviles CF" class="sidebar-logo" />
@@ -339,9 +328,7 @@
     </ul>
   </div>
 
-  <!-- Main Content -->
   <div class="main-content">
-    <!-- Top Bar -->
     <div class="top-bar">
       <div class="brand">
         <h5 class="brand-title">Moviles CF - Panel de Administración</h5>
@@ -353,7 +340,6 @@
       </div>
     </div>
 
-    <!-- Products Section -->
     <div class="table-container" id="productos-section">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Lista de Productos</h2>
@@ -374,12 +360,10 @@
           </tr>
         </thead>
         <tbody id="productos-body" class="table-group-divider">
-          <!-- Los productos se cargarán dinámicamente aquí -->
         </tbody>
       </table>
     </div>
 
-    <!-- Users Section -->
     <div class="table-container d-none" id="usuarios-section">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Lista de Usuarios</h2>
@@ -400,12 +384,10 @@
           </tr>
         </thead>
         <tbody id="usuarios-body">
-          <!-- Los usuarios se cargarán dinámicamente aquí -->
         </tbody>
       </table>
     </div>
 
-    <!-- Invoices Section -->
     <div class="table-container d-none" id="facturas-section">
       <h2>Lista de Facturas</h2>
       <table class="table table-hover">
@@ -420,12 +402,10 @@
           </tr>
         </thead>
         <tbody id="facturas-body">
-          <!-- Las facturas se cargarán dinámicamente aquí -->
         </tbody>
       </table>
     </div>
 
-    <!-- Purchases Section -->
     <div class="table-container d-none" id="compras-section">
       <h2>Lista de Compras</h2>
       <table class="table table-hover">
@@ -439,18 +419,15 @@
           </tr>
         </thead>
         <tbody id="compras-body">
-          <!-- Las compras se cargarán dinámicamente aquí -->
         </tbody>
       </table>
     </div>
 
-    <!-- Footer -->
     <footer>
       <p>© 2025 Moviles CF - Panel de Administración | Designed by Developers UTS</p>
     </footer>
   </div>
 
-  <!-- Register Product Modal -->
   <div class="modal fade" id="registerProduct" tabindex="-1" aria-labelledby="registerProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -501,7 +478,6 @@
     </div>
   </div>
 
-  <!-- Register User Modal -->
   <div class="modal fade" id="registerUser" tabindex="-1" aria-labelledby="registerUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -554,6 +530,9 @@
       </div>
     </div>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -561,58 +540,61 @@
   <script src="js/usuarios.js" type="module"></script>
   <script src="js/facturas.js" type="module"></script>
   <script src="js/compras.js" type="module"></script>
-  
 
   <script>
-    // Función para mostrar/ocultar secciones
-    function showSection(sectionToShow) {
-      const sections = {
-        productos: document.getElementById("productos-section"),
-        usuarios: document.getElementById("usuarios-section"),
-        facturas: document.getElementById("facturas-section"),
-        compras: document.getElementById("compras-section")
-      };
-
-      // Ocultar todas las secciones
-      for (const key in sections) {
-        if (sections.hasOwnProperty(key)) {
-          sections[key].classList.add("d-none");
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Verificar si el usuario es administrador
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || !currentUser.tipo || currentUser.tipo !== 'admin') {
+        localStorage.removeItem('currentUser'); // Limpiar localStorage para evitar manipulaciones
+        window.location.href = 'login.html?error=unauthorized';
+        return;
       }
 
-      // Mostrar la sección seleccionada
-      sections[sectionToShow].classList.remove("d-none");
+      // Función para mostrar/ocultar secciones
+      function showSection(sectionToShow) {
+        const sections = {
+          productos: document.getElementById("productos-section"),
+          usuarios: document.getElementById("usuarios-section"),
+          facturas: document.getElementById("facturas-section"),
+          compras: document.getElementById("compras-section")
+        };
 
-      // Actualizar el estado activo del menú
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
+        for (const key in sections) {
+          if (sections.hasOwnProperty(key)) {
+            sections[key].classList.add("d-none");
+          }
+        }
+
+        sections[sectionToShow].classList.remove("d-none");
+
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        document.getElementById(`ver-${sectionToShow}`).parentElement.classList.add('active');
+      }
+
+      document.getElementById("ver-productos").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("productos");
       });
-      
-      document.getElementById(`ver-${sectionToShow}`).parentElement.classList.add('active');
-    }
 
-    // Event listeners para los enlaces del menú
-    document.getElementById("ver-productos").addEventListener("click", (e) => {
-      e.preventDefault();
-      showSection("productos");
-    });
+      document.getElementById("ver-usuarios").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("usuarios");
+      });
 
-    document.getElementById("ver-usuarios").addEventListener("click", (e) => {
-      e.preventDefault();
-      showSection("usuarios");
-    });
+      document.getElementById("ver-facturas").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("facturas");
+      });
 
-    document.getElementById("ver-facturas").addEventListener("click", (e) => {
-      e.preventDefault();
-      showSection("facturas");
-    });
+      document.getElementById("ver-compras").addEventListener("click", (e) => {
+        e.preventDefault();
+        showSection("compras");
+      });
 
-    document.getElementById("ver-compras").addEventListener("click", (e) => {
-      e.preventDefault();
-      showSection("compras");
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
       showSection("productos");
     });
   </script>

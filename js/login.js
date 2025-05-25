@@ -1,4 +1,3 @@
-
 import {
     obtenerUsuarios,
     crearUsuario,
@@ -43,6 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
         email: "admin@movilescf.com",
         password: "admin123"
     };
+
+    // Verificar parámetros de error en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'unauthorized') {
+        showError('Acceso no autorizado. Solo los administradores pueden acceder al panel.');
+    }
 
     // Note: getUsuarioPorCorreo is now less relevant since we're doing a direct fetch in handleClientLogin
     const getUsuarioPorCorreo = async (email) => {
@@ -159,12 +164,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const adminId = "admin_id";
                 console.log(`[handleAdminLogin] ID de administrador recibido (hardcodeado): ${adminId}`);
 
-                localStorage.setItem('currentUser', JSON.stringify({
+                const userData = {
                     _id: adminId,
                     nombre: "Administrador",
                     email: ADMIN_CREDENTIALS.email,
                     tipo: "admin"
-                }));
+                };
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Set session expiration (2 minutes from now)
+                const expirationTime = new Date().getTime() + 2 * 60 * 1000; // 2 minutes in milliseconds
+                localStorage.setItem('sessionExpiration', expirationTime);
 
                 window.location.href = 'index.html';
             } else {
@@ -213,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     const response = await fetch(emailLookupUrl);
                     if (!response.ok) {
-                        const errorDetail = await response.text(); // Get raw text for more info
+                        const errorDetail = await response.text();
                         throw new Error(`Error ${response.status} al obtener usuario por email: ${errorDetail}`);
                     }
                     const dataFromEmailLookup = await response.json();
@@ -222,8 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (dataFromEmailLookup && (dataFromEmailLookup._id || dataFromEmailLookup.id || dataFromEmailLookup.id_usuario)) {
                         userId = dataFromEmailLookup._id || dataFromEmailLookup.id || dataFromEmailLookup.id_usuario;
-                        // Use the data from this lookup to reconstruct the user object if necessary
-                        usuarioAutenticado = dataFromEmailLookup; // Overwrite or merge if needed
+                        usuarioAutenticado = dataFromEmailLookup;
                         console.log(`%c[handleClientLogin] ID de usuario obtenido de consulta por email: ${userId}`, 'color: green; font-weight: bold;');
                     } else {
                         throw new Error('No se encontró un ID válido en la consulta por email.');
@@ -231,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } catch (emailLookupError) {
                     console.error('[handleClientLogin] Fallo en la consulta directa por email:', emailLookupError);
                     showError(`Error al verificar usuario: ${emailLookupError.message}`);
-                    throw new Error('Fallo de autenticación: No se pudo verificar el usuario.'); 
+                    throw new Error('Fallo de autenticación: No se pudo verificar el usuario.');
                 }
             }
 
@@ -239,16 +248,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('No se pudo obtener un ID de usuario válido después de todos los intentos.');
             }
 
-            if (!usuarioAutenticado.nombre || !usuarioAutenticado.email) {
-                console.warn('[handleClientLogin] El objeto de usuario autenticado carece de nombre o email. Usando valores predeterminados si es posible.');
-            }
-
-            localStorage.setItem('currentUser', JSON.stringify({
+            const userData = {
                 _id: userId,
-                nombre: usuarioAutenticado.nombre || 'Usuario Cliente', 
-                email: usuarioAutenticado.email || email, 
+                nombre: usuarioAutenticado.nombre || 'Usuario Cliente',
+                email: usuarioAutenticado.email || email,
                 tipo: usuarioAutenticado.tipo || 'cliente'
-            }));
+            };
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+
+            // Set session expiration (2 minutes from now)
+            const expirationTime = new Date().getTime() + 2 * 60 * 1000; // 2 minutes in milliseconds
+            localStorage.setItem('sessionExpiration', expirationTime);
 
             console.log('[handleClientLogin] Login exitoso. Redirigiendo a cliente.html');
             window.location.href = 'cliente.html';
@@ -338,4 +348,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-

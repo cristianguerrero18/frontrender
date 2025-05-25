@@ -8,8 +8,80 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logout-btn');
     const userWelcome = document.querySelector('.user-welcome');
     
-    // Mostrar u ocultar elementos según el estado de autenticación
+    let sessionTimeout;
+
+    // Función para actualizar el tiempo de expiración de la sesión
+    function resetSessionExpiration() {
+        const newExpirationTime = new Date().getTime() + 2 * 60 * 1000; // 2 minutos desde ahora
+        localStorage.setItem('sessionExpiration', newExpirationTime);
+        return newExpirationTime;
+    }
+
+    // Función para iniciar o reiniciar el temporizador de la sesión
+    function startSessionTimer() {
+        clearTimeout(sessionTimeout); // Limpiar cualquier temporizador existente
+        const expirationTime = localStorage.getItem('sessionExpiration');
+        if (!expirationTime) {
+            handleLogout();
+            return;
+        }
+
+        const timeLeft = expirationTime - new Date().getTime();
+        if (timeLeft <= 0) {
+            showSessionTimeoutModal();
+            return;
+        }
+
+        sessionTimeout = setTimeout(showSessionTimeoutModal, timeLeft);
+    }
+
+    // Función para mostrar el modal de expiración de sesión
+    function showSessionTimeoutModal() {
+        const modal = new bootstrap.Modal(document.getElementById('session-timeout-modal'), {
+            backdrop: 'static', // Evitar cerrar al hacer clic fuera
+            keyboard: false // Evitar cerrar con la tecla ESC
+        });
+        modal.show();
+
+        // Escuchadores de eventos para los botones del modal
+        document.getElementById('keep-session').addEventListener('click', () => {
+            // Extender la sesión al restablecer el tiempo de expiración
+            resetSessionExpiration();
+            modal.hide();
+            startSessionTimer(); // Reiniciar el temporizador
+        }, { once: true }); // Usar { once: true } para evitar múltiples escuchadores
+
+        document.getElementById('logout-session').addEventListener('click', () => {
+            handleLogout();
+            modal.hide();
+        }, { once: true });
+    }
+
+    // Función para manejar el cierre de sesión
+    function handleLogout() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('sessionExpiration');
+        clearTimeout(sessionTimeout);
+        window.location.href = 'login.html';
+    }
+
+    // Configurar escuchadores de eventos para la actividad del usuario
+    function setupActivityListeners() {
+        const events = ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+        events.forEach(event => {
+            document.addEventListener(event, () => {
+                resetSessionExpiration();
+                startSessionTimer();
+            }, { passive: true }); // Usar passive para mejor rendimiento en eventos como scroll
+        });
+    }
+
+    // Inicializar temporizador de sesión y escuchadores de actividad si el usuario está logueado
     if (currentUser && currentUser.tipo === 'cliente') {
+        resetSessionExpiration(); // Establecer tiempo de expiración inicial
+        startSessionTimer(); // Iniciar el temporizador
+        setupActivityListeners(); // Configurar escuchadores de actividad
         // Mostrar nombre del usuario
         document.getElementById('user-name').textContent = currentUser.nombre;
         logoutBtn.style.display = 'block';
@@ -36,11 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'historial-compras.html';
         });
         
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('cart');
-            window.location.href = 'login.html';
-        });
+        document.getElementById('logout-btn').addEventListener('click', handleLogout);
     }
     
     // Cargar productos
@@ -315,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     filteredProducts.sort((a, b) => a.nombre.localeCompare(b.nombre));
                     break;
                 case 'name-desc':
-                    filteredProducts.sort((a, b) => b.nombre.localeCompare(a.nombre));
+                    filteredProducts.sort((a, b) => b.nombre.localeCompare(b.nombre));
                     break;
             }
             
