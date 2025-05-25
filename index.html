@@ -4,598 +4,350 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Administrador - Moviles CF</title>
-  <link rel="icon" type="images/png" href="/images/Fondo-claro-logo.webp" />
+  <title>Tienda - Moviles CF</title>
+  <link rel="icon" type="image/png" href="/images/Fondo-claro-logo.webp" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/cliente.css" />
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root {
-      --primary-color: #13547a;
-      --secondary-color: #80d0c7;
-      --sidebar-width: 280px;
-      --topbar-height: 70px;
-    }
-    
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #f8f9fa;
-      overflow-x: hidden;
-    }
-    .sidebar {
-      width: var(--sidebar-width);
-      height: 100vh;
+    .guest-message {
+      display: none;
       position: fixed;
-      left: 0;
-      top: 0;
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-      color: white;
-      transition: all 0.3s;
+      top: 80px;
+      right: 20px;
       z-index: 1000;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
-    
-    .sidebar-header {
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .sidebar-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    
-    .sidebar-title {
-      font-weight: 600;
-      margin: 0;
-      font-size: 1.1rem;
-    }
-    
-    .sidebar-menu {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .sidebar-item {
-      padding: 12px 20px;
-      transition: all 0.3s;
-      border-left: 3px solid transparent;
-    }
-    
-    .sidebar-item:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-left: 3px solid white;
-    }
-    
-    .sidebar-item.active {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-left: 3px solid white;
-    }
-    
-    .sidebar-link {
-      color: white;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-    }
-    
-    .sidebar-item a:hover {
-      color: black;
-    }
-  
-    .sidebar-link i {
-      font-size: 1.1rem;
-    }
-    
-    .main-content {
-      margin-left: var(--sidebar-width);
-      min-height: 100vh;
-      transition: all 0.3s;
-    }
-    
-    .top-bar {
-      height: var(--topbar-height);
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .brand-logo {
-      height: 40px;
-    }
-    
-    .brand-title {
-      font-weight: 700;
-      margin: 0;
-      color: var(--primary-color);
-    }
-    
-    .top-bar-icons {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .top-bar-icons a {
-      color: #6c757d;
-      font-size: 1.2rem;
-      transition: all 0.3s;
-    }
-    
-    .top-bar-icons a:hover {
-      color: var(--primary-color);
-    }
-    
-    .table-container {
-      padding: 30px;
-      background-color: white;
-      margin: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-    
-    .table-container h2 {
-      font-weight: 600;
-      margin-bottom: 25px;
-      color: var(--primary-color);
-    }
-    
-    .table {
-      margin-top: 20px;
-    }
-    
-    .table th {
-      font-weight: 600;
-      background-color: #f8f9fa;
-      color: #495057;
-    }
-    
-    .table img {
-      max-width: 60px;
-      max-height: 60px;
-      border-radius: 5px;
-    }
-    
-    .action-btn {
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      margin: 0 3px;
-      transition: all 0.3s;
-    }
-    
-    .action-btn:hover {
-      transform: scale(1.1);
-    }
-    
-    .btn-details {
-      background-color: rgba(13, 110, 253, 0.1);
-      color: #0d6efd;
-    }
-    
-    .btn-edit {
-      background-color: rgba(255, 193, 7, 0.1);
-      color: #ffc107;
-    }
-    
-    .btn-delete {
-      background-color: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
-    }
-    
-    footer {
-      padding: 20px;
-      text-align: center;
-      color: #6c757d;
-      font-size: 0.9rem;
-      margin-top: 30px;
-    }
-    
-    .modal-header {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    
-    .modal-title {
-      font-weight: 600;
-      color: var(--primary-color);
-    }
-    
-    @media (max-width: 992px) {
-      .sidebar {
-        width: 80px;
-        overflow: hidden;
-      }
-      
-      .sidebar-header {
-        justify-content: center;
-      }
-      
-      .sidebar-title, .sidebar-link span {
-        display: none;
-      }
-      
-      .sidebar-link {
-        justify-content: center;
-      }
-      
-      .main-content {
-        margin-left: 80px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      
-      .sidebar.active {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
-      
-      .top-bar {
-        padding: 0 15px;
-      }
-      
-      .table-container {
-        padding: 15px;
-        margin: 10px;
-      }
+    .guest-message.show {
+      display: block;
     }
   </style>
 </head>
-
 <body>
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <img src="img/administrador.png" alt="Moviles CF" class="sidebar-logo" />
-      <h4 class="sidebar-title">Admin</h4>
+  <!-- Alerta para usuarios invitados -->
+  <div class="guest-message alert alert-warning alert-dismissible fade" role="alert">
+    Si deseas realizar compras, te invitamos a iniciar sesión. <a href="login.html" class="alert-link">Inicia sesión aquí</a>.
+    <div class="mt-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="guest-message-cancel">Cancelar</button>
+      <button type="button" class="btn btn-sm btn-primary" onclick="window.location.href='login.html'">Iniciar sesión</button>
     </div>
-
-    <ul class="sidebar-menu">
-      <li class="sidebar-item active">
-        <a class="sidebar-link" href="#" id="ver-productos">
-          <i class="bi bi-box-seam"></i>
-          <span>Productos</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" type="submit" data-bs-toggle="modal" data-bs-target="#registerProduct">
-          <i class="bi bi-plus-circle"></i>
-          <span>Nuevo Producto</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="#" id="ver-usuarios">
-          <i class="bi bi-people-fill"></i>
-          <span>Usuarios</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" type="submit" data-bs-toggle="modal" data-bs-target="#registerUser">
-          <i class="bi bi-person-plus"></i>
-          <span>Nuevo Usuario</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="#" id="ver-facturas">
-          <i class="bi bi-receipt"></i>
-          <span>Facturas</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="#" id="ver-compras">
-          <i class="bi bi-cart-check"></i>
-          <span>Compras</span>
-        </a>
-      </li>
-      <li class="sidebar-item">
-        <a class="sidebar-link" href="login.html">
-          <i class="bi bi-box-arrow-right"></i>
-          <span>Cerrar Sesión</span>
-        </a>
-      </li>
-    </ul>
   </div>
 
-  <div class="main-content">
-    <div class="top-bar">
-      <div class="brand">
-        <h5 class="brand-title">Moviles CF - Panel de Administración</h5>
-      </div>
-      <div class="top-bar-icons">
-        <a href="#"><i class="bi bi-envelope"></i></a>
-        <a href="#"><i class="bi bi-bell"></i></a>
-        <a href="#"><i class="bi bi-person-circle"></i></a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="img/remove.png" alt="Moviles CF">
+        Moviles CF
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Ofertas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="user-welcome text-light d-none d-md-block">
+            Bienvenido, <span id="user-name">Usuario</span>
+          </div>
+          <div class="dropdown me-3">
+            <div class="cart-icon text-light" data-bs-toggle="dropdown">
+              <i class="bi bi-cart3 fs-5"></i>
+              <span class="cart-count" id="cart-count">0</span>
+            </div>
+            <div class="dropdown-menu dropdown-menu-end cart-dropdown" id="cart-dropdown">
+              <h6 class="dropdown-header">Tu Carrito</h6>
+              <div id="cart-items">
+                <!-- Los items del carrito se agregarán dinámicamente -->
+              </div>
+              <div class="d-flex justify-content-between mt-3">
+                <span>Total:</span>
+                <span id="cart-total" class="fw-bold">$0.00</span>
+              </div>
+              <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-primary" id="checkout-btn">Proceder al pago</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline-light btn-sm" id="login-btn" style="display: none;">
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+          </button>
+          <button class="btn btn-outline-light btn-sm" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+          </button>
+        </div>
       </div>
     </div>
+  </nav>
 
-    <div class="table-container" id="productos-section">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Lista de Productos</h2>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerProduct">
-          <i class="bi bi-plus-circle"></i> Nuevo Producto
+  <section class="hero-section text-center">
+    <div class="container">
+      <h1 class="hero-title">Descubre los Mejores Smartphones</h1>
+      <p class="hero-text">Encuentra los últimos modelos de celulares con las mejores ofertas y garantía de calidad.</p>
+      <div class="search-container d-flex">
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar productos...">
+        <button class="search-button" id="search-btn">
+          <i class="bi bi-search"></i>
         </button>
       </div>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Stock</th>
-            <th scope="col">Imagen</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="productos-body" class="table-group-divider">
-        </tbody>
-      </table>
     </div>
+  </section>
 
-    <div class="table-container d-none" id="usuarios-section">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Lista de Usuarios</h2>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerUser">
-          <i class="bi bi-person-plus"></i> Nuevo Usuario
-        </button>
+  <div class="container">
+    <div class="row filter-container">
+      <div class="col-md-6">
+        <h2 class="mb-4">Catálogo de Productos</h2>
       </div>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Cédula</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Email</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="usuarios-body">
-        </tbody>
-      </table>
+      <div class="col-md-6">
+        <div class="d-flex justify-content-md-end">
+          <select class="form-select w-auto" id="filter-select">
+            <option value="all">Todos los productos</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="name-asc">Nombre: A-Z</option>
+            <option value="name-desc">Nombre: Z-A</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div class="table-container d-none" id="facturas-section">
-      <h2>Lista de Facturas</h2>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID Factura</th>
-            <th scope="col">ID Compra</th>
-            <th scope="col">Número</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Total</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="facturas-body">
-        </tbody>
-      </table>
+    <!-- Products Grid -->
+    <div class="row" id="products-container">
+      <!-- Los productos se cargarán dinámicamente aquí -->
     </div>
-
-    <div class="table-container d-none" id="compras-section">
-      <h2>Lista de Compras</h2>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID Compra</th>
-            <th scope="col">ID Usuario</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Total</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="compras-body">
-        </tbody>
-      </table>
-    </div>
-
-    <footer>
-      <p>© 2025 Moviles CF - Panel de Administración | Designed by Developers UTS</p>
-    </footer>
   </div>
 
-  <div class="modal fade" id="registerProduct" tabindex="-1" aria-labelledby="registerProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+  <!-- Product Detail Modal -->
+  <div class="modal fade" id="product-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="registerProductLabel">Registrar Nuevo Producto</h5>
+          <h5 class="modal-title" id="modal-product-name">Nombre del Producto</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form-agregar" class="row g-3" method="POST">
-            <div class="col-md-12">
-              <label for="nombrecel" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombrecel" name="nombrecel" required>
-            </div>
-            <div class="col-md-12">
-              <label for="marca" class="form-label">Marca</label>
-              <input type="text" class="form-control" id="marca" name="marca" required>
-            </div>
-            <div class="col-md-12">
-              <label for="modelo" class="form-label">Modelo</label>
-              <input type="text" class="form-control" id="modelo" name="modelo" required>
-            </div>
-            <div class="col-md-12">
-              <label for="descripcion" class="form-label">Descripción</label>
-              <textarea class="form-control" id="descripcion" name="descripcion" rows="2" required></textarea>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img src="/placeholder.svg" id="modal-product-image" class="modal-product-img" alt="Producto">
             </div>
             <div class="col-md-6">
-              <label for="precio" class="form-label">Precio Unitario</label>
-              <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+              <div class="modal-product-price" id="modal-product-price">$0.00</div>
+              <div class="modal-product-info">
+                <p><strong>Marca:</strong> <span id="modal-product-brand"></span></p>
+                <p><strong>Modelo:</strong> <span id="modal-product-model"></span></p>
+                <p><strong>Disponibilidad:</strong> <span id="modal-product-stock"></span> unidades</p>
+              </div>
+              <p id="modal-product-description"></p>
+              <div class="quantity-control">
+                <div class="quantity-btn" id="decrease-quantity">-</div>
+                <input type="number" id="product-quantity" class="quantity-input" value="1" min="1">
+                <div class="quantity-btn" id="increase-quantity">+</div>
+              </div>
             </div>
-            <div class="col-md-6">
-              <label for="stock" class="form-label">Stock</label>
-              <input type="number" class="form-control" id="stock" name="stock" required>
-            </div>
-            <div class="col-md-12">
-              <label for="imagen" class="form-label">Imagen (URL)</label>
-              <input type="text" class="form-control" id="imagen" name="imagen" required>
-            </div>
-            <button type="submit" style="display: none;"></button>
-          </form>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="enviarFormulario">
-            <i class="bi bi-save"></i> Guardar Producto
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="add-to-cart-modal">
+            <i class="bi bi-cart-plus"></i> Agregar al carrito
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="registerUser" tabindex="-1" aria-labelledby="registerUserLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="registerUserLabel">Registrar Nuevo Usuario</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Checkout Modal -->
+  <div class="modal fade" id="checkout-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header text-white rounded-top-4" style="background: linear-gradient(to right, #0a4d79, #57a3ad);">
+          <h5 class="modal-title">
+            <i class="bi bi-bag-check-fill me-2"></i> Confirmar Compra
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form-agregar-usuario" class="row g-3" method="POST">
-            <div class="col-md-12">
-              <label for="nombre" class="form-label">Nombre Completo</label>
-              <input type="text" class="form-control" id="nombre" required>
-            </div>
-            <div class="col-md-12">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" required>
-            </div>
-            <div class="col-md-12">
-              <label for="password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="password" required>
-            </div>
-            <div class="col-md-12">
-              <label for="direccion" class="form-label">Dirección</label>
-              <input type="text" class="form-control" id="direccion" required>
-            </div>
-            <div class="col-md-12">
-              <label for="telefono" class="form-label">Teléfono</label>
-              <input type="number" class="form-control" id="telefono" required>
-            </div>
-            <div class="col-md-12">
-              <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
-              <select class="form-select" id="tipo_usuario" required>
-                <option value="">Seleccionar...</option>
-                <option value="admin">Administrador</option>
-                <option value="cliente">Cliente</option>
-              </select>
-            </div>
-            <div class="col-md-12">
-              <label for="cedula" class="form-label">Cédula</label>
-              <input type="number" class="form-control" id="cedula" required>
-            </div>
-          </form>
+          <p class="mb-3 text-center">¿Estás seguro de que deseas realizar esta compra?</p>
+          <div id="checkout-items" class="border rounded p-2 bg-light mb-3" style="max-height: 200px; overflow-y: auto;">
+            <!-- Los items de la compra se mostrarán aquí -->
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <strong>Total:</strong>
+            <strong id="checkout-total" class="fs-5 text-primary">$0.00</strong>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="enviarFormulario-usuario">
-            <i class="bi bi-person-plus"></i> Registrar Usuario
+          <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Cancelar
+          </button>
+          <button type="button" class="btn rounded-pill text-white" id="confirm-checkout"
+            style="background: linear-gradient(to right, #0a4d79, #57a3ad); border: none;">
+            <i class="bi bi-check-circle me-1"></i> Confirmar Compra
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Session Timeout Modal -->
+  <div class="modal fade" id="session-timeout-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header text-white rounded-top-4" style="background: linear-gradient(to right, #0a4d79, #57a3ad);">
+          <h5 class="modal-title">
+            <i class="bi bi-clock me-2"></i> Sesión a punto de expirar
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">Tu sesión expirará en breve. ¿Deseas mantener la sesión activa?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary rounded-pill" id="logout-session">
+            <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
+          </button>
+          <button type="button" class="btn rounded-pill text-white" id="keep-session" style="background: linear-gradient(to right, #0a4d79, #57a3ad); border: none;">
+            <i class="bi bi-check-circle me-1"></i> Mantener sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5>Moviles CF</h5>
+          <p>Tu tienda de confianza para dispositivos móviles de última generación.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Productos</a></li>
+            <li><a href="#">Sobre nosotros</a></li>
+            <li><a href="#">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Contacto</h5>
+          <address>
+            <p><i class="bi bi-geo-alt me-2"></i> Calle Principal #123</p>
+            <p><i class="bi bi-telephone me-2"></i> (123) 456-7890</p>
+            <p><i class="bi bi-envelope me-2"></i> info@movilescf.com</p>
+          </address>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p>© 2024 Moviles CF - Todos los derechos reservados</p>
+        <p>Designed by Developers UTS</p>
+      </div>
+    </div>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="js/producto.js" type="module"></script>
-  <script src="js/usuarios.js" type="module"></script>
-  <script src="js/facturas.js" type="module"></script>
-  <script src="js/compras.js" type="module"></script>
-
+  <script src="js/cliente.js" type="module"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Verificar si el usuario es administrador
+      // Verificar autenticación del usuario
       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (!currentUser || !currentUser.tipo || currentUser.tipo !== 'admin') {
-        localStorage.removeItem('currentUser'); // Limpiar localStorage para evitar manipulaciones
-        window.location.href = 'login.html?error=unauthorized';
+      const isAuthenticated = currentUser && currentUser.tipo === 'cliente';
+      const userName = document.getElementById('user-name');
+      const loginBtn = document.getElementById('login-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      const guestMessage = document.querySelector('.guest-message');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      const confirmCheckout = document.getElementById('confirm-checkout');
+
+      // Verificar expiración de la sesión
+      const sessionExpiration = localStorage.getItem('sessionExpiration');
+      if (sessionExpiration && new Date().getTime() > sessionExpiration) {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('sessionExpiration');
+        window.location.href = 'login.html?error=session_expired';
         return;
       }
 
-      // Función para mostrar/ocultar secciones
-      function showSection(sectionToShow) {
-        const sections = {
-          productos: document.getElementById("productos-section"),
-          usuarios: document.getElementById("usuarios-section"),
-          facturas: document.getElementById("facturas-section"),
-          compras: document.getElementById("compras-section")
-        };
-
-        for (const key in sections) {
-          if (sections.hasOwnProperty(key)) {
-            sections[key].classList.add("d-none");
-          }
-        }
-
-        sections[sectionToShow].classList.remove("d-none");
-
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        
-        document.getElementById(`ver-${sectionToShow}`).parentElement.classList.add('active');
+      // Ajustar interfaz según autenticación
+      if (isAuthenticated) {
+        userName.textContent = currentUser.nombre || 'Usuario';
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+      } else {
+        userName.textContent = 'Invitado';
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        // Deshabilitar botones de pago
+        checkoutBtn.disabled = true;
+        checkoutBtn.title = 'Inicia sesión para proceder al pago';
+        confirmCheckout.disabled = true;
+        confirmCheckout.title = 'Inicia sesión para confirmar la compra';
       }
 
-      document.getElementById("ver-productos").addEventListener("click", (e) => {
-        e.preventDefault();
-        showSection("productos");
+      // Manejar clic en "Iniciar sesión"
+      loginBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
       });
 
-      document.getElementById("ver-usuarios").addEventListener("click", (e) => {
-        e.preventDefault();
-        showSection("usuarios");
+      // Manejar clic en "Cerrar sesión"
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('sessionExpiration');
+        window.location.href = 'login.html';
       });
 
-      document.getElementById("ver-facturas").addEventListener("click", (e) => {
-        e.preventDefault();
-        showSection("facturas");
+      // Mostrar mensaje para invitados al intentar acciones de compra
+      const showGuestMessage = () => {
+        if (guestMessage) {
+          guestMessage.classList.add('show');
+          const timeoutId = setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 5000);
+          // Manejar clic en "Cancelar"
+          const cancelBtn = guestMessage.querySelector('#guest-message-cancel');
+          if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+              clearTimeout(timeoutId);
+              guestMessage.classList.remove('show');
+            }, { once: true });
+          }
+        } else {
+          console.error('Elemento .guest-message no encontrado en el DOM');
+          window.location.href = 'login.html';
+        }
+      };
+
+      // Bloquear acciones de pago para invitados
+      checkoutBtn.addEventListener('click', (e) => {
+        if (!isAuthenticated) {
+          e.preventDefault();
+          showGuestMessage();
+        }
       });
 
-      document.getElementById("ver-compras").addEventListener("click", (e) => {
-        e.preventDefault();
-        showSection("compras");
+      confirmCheckout.addEventListener('click', (e) => {
+        if (!isAuthenticated) {
+          e.preventDefault();
+          showGuestMessage();
+        }
       });
-
-      showSection("productos");
     });
   </script>
 </body>

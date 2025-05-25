@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             resetSessionExpiration();
             modal.hide();
             startSessionTimer(); // Reiniciar el temporizador
-        }, { once: true }); // Usar { once: true } para evitar múltiples escuchadores
+        }, { once: true });
 
         document.getElementById('logout-session').addEventListener('click', () => {
             handleLogout();
@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para manejar el cierre de sesión
     function handleLogout() {
         localStorage.removeItem('currentUser');
-        localStorage.removeItem('cart');
         localStorage.removeItem('sessionExpiration');
         clearTimeout(sessionTimeout);
         window.location.href = 'login.html';
@@ -71,37 +70,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const events = ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'];
         events.forEach(event => {
             document.addEventListener(event, () => {
-                resetSessionExpiration();
-                startSessionTimer();
-            }, { passive: true }); // Usar passive para mejor rendimiento en eventos como scroll
+                if (currentUser && currentUser.tipo === 'cliente') {
+                    resetSessionExpiration();
+                    startSessionTimer();
+                }
+            }, { passive: true });
         });
     }
 
     // Inicializar temporizador de sesión y escuchadores de actividad si el usuario está logueado
     if (currentUser && currentUser.tipo === 'cliente') {
-        resetSessionExpiration(); // Establecer tiempo de expiración inicial
-        startSessionTimer(); // Iniciar el temporizador
-        setupActivityListeners(); // Configurar escuchadores de actividad
-        // Mostrar nombre del usuario
+        resetSessionExpiration();
+        startSessionTimer();
+        setupActivityListeners();
         document.getElementById('user-name').textContent = currentUser.nombre;
         logoutBtn.style.display = 'block';
         userWelcome.style.display = 'block';
         
-        // Crear contenedor para botones de usuario
         const userButtonsContainer = document.createElement('div');
         userButtonsContainer.className = 'd-flex align-items-center';
         
-        // Botón de historial de compras
         const historyBtn = document.createElement('button');
         historyBtn.className = 'btn btn-outline-light btn-sm me-2';
         historyBtn.innerHTML = '<i class="bi bi-person-circle"></i> Mi perfil';
         historyBtn.id = 'history-btn';
         
-        // Agregar botones al contenedor
         userButtonsContainer.appendChild(historyBtn);
         userButtonsContainer.appendChild(logoutBtn.cloneNode(true));
         
-        // Reemplazar el logoutBtn original con el contenedor
         logoutBtn.replaceWith(userButtonsContainer);
        
         historyBtn.addEventListener('click', () => {
@@ -109,6 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         document.getElementById('logout-btn').addEventListener('click', handleLogout);
+    } else {
+        logoutBtn.style.display = 'none';
+        userWelcome.style.display = 'block';
+        document.getElementById('user-name').textContent = 'Invitado';
     }
     
     // Cargar productos
@@ -117,6 +117,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar carrito desde localStorage
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     updateCartUI();
+
+    // Función para mostrar mensaje de invitado
+    function showGuestMessage(e) {
+        e.preventDefault();
+        const guestMessage = document.querySelector('.guest-message');
+        if (guestMessage) {
+            guestMessage.classList.add('show');
+            const timeoutId = setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 5000);
+            const cancelBtn = guestMessage.querySelector('#guest-message-cancel');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    clearTimeout(timeoutId);
+                    guestMessage.classList.remove('show');
+                }, { once: true });
+            }
+        } else {
+            console.error('Elemento .guest-message no encontrado en el DOM');
+            alert('Si deseas realizar compras, te invitamos a iniciar sesión');
+            window.location.href = 'login.html';
+        }
+    }
 
     // Event listeners
     document.getElementById('search-btn').addEventListener('click', function() {
@@ -138,21 +161,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const quantity = parseInt(document.getElementById('product-quantity').value);
         addToCart(productId, quantity);
         
-        // Cerrar modal después de agregar al carrito
         const modal = bootstrap.Modal.getInstance(document.getElementById('product-modal'));
         modal.hide();
     });
 
-    document.getElementById('checkout-btn').addEventListener('click', function() {
+    document.getElementById('checkout-btn').addEventListener('click', function(e) {
+        if (!currentUser || currentUser.tipo !== 'cliente') {
+            showGuestMessage(e);
+            return;
+        }
         if (cart.length === 0) {
             alert('Tu carrito está vacío');
             return;
         }
-        
         showCheckoutModal();
     });
 
-    document.getElementById('confirm-checkout').addEventListener('click', function() {
+    document.getElementById('confirm-checkout').addEventListener('click', function(e) {
+        if (!currentUser || currentUser.tipo !== 'cliente') {
+            showGuestMessage(e);
+            return;
+        }
         processCheckout();
     });
 
@@ -191,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.appendChild(productCard);
             });
             
-            // Agregar event listeners
             document.querySelectorAll('.view-details').forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.dataset.id;
@@ -233,10 +261,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('product-quantity').value = 1;
             document.getElementById('product-quantity').max = stock;
             
-            // Guardar el ID del producto en el botón de agregar al carrito
             document.getElementById('add-to-cart-modal').dataset.productId = productId;
             
-            // Mostrar modal
             const modal = new bootstrap.Modal(document.getElementById('product-modal'));
             modal.show();
         } catch (error) {
@@ -246,12 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addToCart(productId, quantity) {
-        if (!currentUser) {
-            alert('Por favor inicia sesión para agregar productos al carrito');
-            window.location.href = 'login.html';
-            return;
-        }
-
         if (quantity <= 0) {
             alert('Por favor, selecciona una cantidad válida');
             return;
@@ -270,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Verificar si el producto ya está en el carrito
             const existingItemIndex = cart.findIndex(item => item.id == productId);
             
             if (existingItemIndex >= 0) {
@@ -377,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     filteredProducts.sort((a, b) => a.precio_unitario - b.precio_unitario);
                     break;
                 case 'price-desc':
-                    filteredProducts.sort((a, b) => b.precio_unitario - a.precio_unitario);
+                    filteredProducts.sort((a, b) => b.precio_unitario - b.precio_unitario);
                     break;
                 case 'name-asc':
                     filteredProducts.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -443,9 +462,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showCheckoutModal() {
-        if (!currentUser) {
-            alert('Por favor inicia sesión para realizar una compra');
-            window.location.href = 'login.html';
+        if (!currentUser || currentUser.tipo !== 'cliente') {
+            const guestMessage = document.querySelector('.guest-message');
+            if (guestMessage) {
+                guestMessage.classList.add('show');
+                const timeoutId = setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 5000);
+                const cancelBtn = guestMessage.querySelector('#guest-message-cancel');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', () => {
+                        clearTimeout(timeoutId);
+                        guestMessage.classList.remove('show');
+                    }, { once: true });
+                }
+            } else {
+                console.error('Elemento .guest-message no encontrado en el DOM');
+                alert('Si deseas realizar compras, te invitamos a iniciar sesión');
+                window.location.href = 'login.html';
+            }
             return;
         }
 
@@ -483,8 +518,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
     
-        if (!currentUser || !currentUser._id) {
-            alert('No has iniciado sesión o el usuario no está correctamente definido.');
+        if (!currentUser || !currentUser._id || currentUser.tipo !== 'cliente') {
+            const guestMessage = document.querySelector('.guest-message');
+            if (guestMessage) {
+                guestMessage.classList.add('show');
+                const timeoutId = setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 5000);
+                const cancelBtn = guestMessage.querySelector('#guest-message-cancel');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', () => {
+                        clearTimeout(timeoutId);
+                        guestMessage.classList.remove('show');
+                    }, { once: true });
+                }
+            } else {
+                console.error('Elemento .guest-message no encontrado en el DOM');
+                alert('Si deseas realizar compras, te invitamos a iniciar sesión');
+                window.location.href = 'login.html';
+            }
             return;
         }
     
@@ -493,7 +545,6 @@ document.addEventListener('DOMContentLoaded', function() {
             checkoutBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
             checkoutBtn.disabled = true;
             
-            // Crear objeto de compra para el backend
             const compraData = {
                 id_usuario: currentUser._id,
                 items: cart.map(item => ({
@@ -502,11 +553,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }))
             };
             
-            // Enviar la compra al servidor
             const compraResult = await crearCompra(compraData);
             
             if (compraResult && compraResult.compra) {
-                // Generar la factura automáticamente
                 const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 const facturaData = {
                     id_compra: compraResult.compra._id,
@@ -515,23 +564,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     total: total
                 };
                 
-                // Crear la factura
                 const facturaResult = await crearFactura(facturaData);
                 
                 if (facturaResult) {
-                    // Limpiar carrito
                     cart = [];
                     localStorage.setItem('cart', JSON.stringify(cart));
                     updateCartUI();
                     
-                    // Cerrar modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('checkout-modal'));
                     modal.hide();
                     
-                    // Mostrar mensaje de éxito con información de la factura
                     alert(`¡Compra realizada con éxito!\nNúmero de factura: ${facturaResult.numero_factura}\nTotal: $${total.toFixed(2)}`);
                     
-                    // Recargar productos para actualizar stock
                     loadProducts();
                 } else {
                     throw new Error('No se pudo generar la factura');
@@ -543,8 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error al procesar la compra:', error);
             alert('Error al procesar la compra: ' + error.message);
         } finally {
-            const checkoutBtn = document.getElementById('confirm-checkout');
-            checkoutBtn.innerHTML = 'Confirmar Compra';
+            checkoutBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Confirmar Compra';
             checkoutBtn.disabled = false;
         }
     }

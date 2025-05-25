@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const expirationTime = new Date().getTime() + 2 * 60 * 1000; // 2 minutes in milliseconds
                 localStorage.setItem('sessionExpiration', expirationTime);
 
-                window.location.href = 'index.html';
+                window.location.href = 'admin.html';
             } else {
                 throw new Error('Credenciales de administrador incorrectas');
             }
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('sessionExpiration', expirationTime);
 
             console.log('[handleClientLogin] Login exitoso. Redirigiendo a cliente.html');
-            window.location.href = 'cliente.html';
+            window.location.href = 'index.html';
 
         } catch (error) {
             console.error('Login error (handleClientLogin):', error);
